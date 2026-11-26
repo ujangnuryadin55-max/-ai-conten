@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>AI Content Factory — Gratis</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--green:#15803d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#111827;color:white;padding:22px 18px 18px}header h1{font-size:22px;margin:0 0 5px}header p{margin:0;color:#cbd5e1;font-size:13px}
+main{max-width:850px;margin:auto;padding:14px 12px 90px}.tabs{display:flex;gap:7px;overflow:auto;margin:0 0 14px}
+.tab{border:1px solid var(--line);background:white;padding:10px 13px;border-radius:20px;white-space:nowrap;font-weight:600;color:#374151}
+.tab.active{background:#1d4ed8;color:white;border-color:#1d4ed8}
+.panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:12px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:#f9fafb;border-radius:12px;padding:12px}.stat b{font-size:24px;display:block}.stat span{font-size:12px;color:var(--muted)}
+button,.btn{border:0;border-radius:10px;padding:11px 13px;background:var(--accent);color:white;font-weight:650;font-size:14px;cursor:pointer}
+button.secondary{background:#e5e7eb;color:#111827}button.danger{background:#fee2e2;color:#991b1b}
+input,textarea,select{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:11px;font:inherit;background:white;margin:5px 0 10px}
+textarea{min-height:82px;resize:vertical}label{font-size:13px;font-weight:650;display:block;margin-top:5px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.small{font-size:12px;color:var(--muted)}.pill{display:inline-block;border-radius:20px;background:#dbeafe;color:#1e40af;padding:4px 8px;font-size:11px;font-weight:700}
+.item{border:1px solid var(--line);padding:10px;border-radius:11px;margin:8px 0}.item strong{display:block}.check{display:flex;align-items:center;gap:8px;margin:8px 0}.check input{width:auto;margin:0}
+.day{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:#fff}.dayhead{display:flex;justify-content:space-between;align-items:center;gap:8px}.platforms{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.platforms label{font-weight:500;margin:0;display:flex;gap:5px;align-items:center}.platforms input{width:auto;margin:0}
+.notice{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:11px;border-radius:10px;font-size:13px;line-height:1.4}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>AI Content Factory</h1><p>Versi gratis • dibuat untuk Safari iPhone • data tersimpan di perangkat ini</p></header>
+<main>
+<nav class="tabs">
+<button class="tab active" data-tab="home">Dashboard</button><button class="tab" data-tab="videos">50 Video</button><button class="tab" data-tab="calendar">30 Hari</button><button class="tab" data-tab="schedule">Jadwal Upload</button>
+</nav>
+<section id="home" class="panel active">
+<div class="card"><h2>Dashboard produksi</h2><div class="grid">
+<div class="stat"><b id="videoCount">0</b><span>Video tersimpan</span></div>
+<div class="stat"><b id="doneCount">0</b><span>Upload ditandai selesai</span></div>
+<div class="stat"><b>30</b><span>Hari perencanaan</span></div>
+<div class="stat"><b>3</b><span>Platform</span></div>
+</div></div>
+<div class="card"><h3>Target kerja harian (rencana)</h3>
+<p>Mulai bertahap: 3 video sehari untuk tes kualitas dan performa. Jangan langsung spam 30 video/hari.</p>
+<div class="notice">Aplikasi ini mengatur file, ide, dan checklist. Tidak membuat video AI sendiri dan tidak mengunggah otomatis. Posting tetap dilakukan manual melalui aplikasi resmi platform.</div></div>
+<div class="card"><h3>Catatan strategi</h3><textarea id="notes" placeholder="Contoh: tes 3 video/hari, cek views dan klik produk..."></textarea><button onclick="saveNotes()">Simpan catatan</button></div>
+</section>
+<section id="videos" class="panel">
+<div class="card"><h2>Perpustakaan video</h2><p class="small">Pilih video dari Foto/File iPhone. Video disimpan lokal di browser ini jika ruang perangkat mencukupi.</p>
+<label>Tambah video (bisa pilih beberapa)</label><input id="files" type="file" accept="video/*" multiple>
+<div class="row"><button onclick="addVideos()">Simpan video terpilih</button><button class="secondary" onclick="clearVideos()">Hapus daftar</button></div>
+<p class="small" id="videoStatus"></p><div id="videoList"></div></div>
+</section>
+<section id="calendar" class="panel">
+<div class="card"><h2>Rencana 30 hari</h2><p class="small">Template 30 hari. Ubah topik/produk sesuai stok video dan kondisi akun.</p>
+<div class="row"><button onclick="makePlan()">Buat ulang rencana</button><button class="secondary" onclick="exportPlan()">Unduh CSV</button></div>
+<div id="days"></div></div>
+</section>
+<section id="schedule" class="panel">
+<div class="card"><h2>Checklist jadwal upload</h2>
+<label>Tanggal</label><input id="upDate" type="date">
+<label>Jam rencana</label><input id="upTime" type="time" value="19:00">
+<label>Nama video / produk</label><input id="upName" placeholder="Contoh: video spray peach - hook 1">
+<label>Caption / hook</label><textarea id="upCaption" placeholder="Tulis teks layar atau caption di sini"></textarea>
+<div class="platforms"><label><input type="checkbox" id="pTik" checked>TikTok</label><label><input type="checkbox" id="pFb" checked>Facebook</label><label><input type="checkbox" id="pYt" checked>YouTube</label></div>
+<button onclick="addSchedule()">Simpan jadwal</button><div id="scheduleList"></div>
+</div></section>
+<footer>Content Factory Gratis • Tidak ada biaya langganan • Simpan/backup data secara berkala</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let db;
+const req=indexedDB.open('contentFactoryFree',1);
+req.onupgradeneeded=e=>{db=e.target.result;if(!db.objectStoreNames.contains('videos'))db.createObjectStore('videos',{keyPath:'id',autoIncrement:true});};
+req.onsuccess=e=>{db=e.target.result;refreshVideos();};
+req.onerror=()=>{$('videoStatus').textContent='Penyimpanan video tidak tersedia di browser ini. Gunakan daftar nama video dan simpan file di Foto/File.';};
+function store(name,mode='readonly'){return db.transaction(name,mode).objectStore(name)}
+function allVideos(){return new Promise(resolve=>{if(!db)return resolve([]);let r=store('videos').getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>resolve([])})}
+async function addVideos(){if(!db){alert('Penyimpanan belum siap. Coba muat ulang halaman.');return}let fs=[...$('files').files];if(!fs.length){alert('Pilih video dulu, bos.');return}let count=0;for(let f of fs){try{await new Promise((res,rej)=>{let r=store('videos','readwrite').add({name:f.name,size:f.size,type:f.type,blob:f,added:new Date().toISOString()});r.onsuccess=res;r.onerror=rej});count++}catch(e){break}}$('videoStatus').textContent=count+' video berhasil disimpan. Jika ruang penuh, kurangi jumlah file.';$('files').value='';refreshVideos()}
+async function refreshVideos(){let a=await allVideos();$('videoCount').textContent=a.length;$('videoList').innerHTML=a.map(v=>`<div class="item"><strong>${esc(v.name)}</strong><span class="small">${(v.size/1048576).toFixed(1)} MB</span> <button class="danger" onclick="deleteVideo(${v.id})">Hapus</button></div>`).join('')||'<p class="small">Belum ada video. Tambahkan dari tombol di atas.</p>'}
+function deleteVideo(id){let r=store('videos','readwrite').delete(id);r.onsuccess=refreshVideos}
+async function clearVideos(){if(!confirm('Hapus semua video yang tersimpan di aplikasi ini?'))return;let a=await allVideos();for(let v of a)store('videos','readwrite').delete(v.id);setTimeout(refreshVideos,200)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')});
+function saveNotes(){localStorage.cfNotes=$('notes').value;alert('Catatan tersimpan.')}
+$('notes').value=localStorage.cfNotes||'';
+const topics=['Affiliate: produk campuran — masalah yang relevan','Hiburan AI: kejadian absurd/lucu','Affiliate: tunjukkan detail produk sebenarnya','Hiburan AI: situasi tak terduga','Affiliate: cara pakai sesuai petunjuk produk'];
+function makePlan(){let arr=[];for(let i=1;i<=30;i++){let topic=topics[(i-1)%topics.length];arr.push({day:i,topic})}localStorage.cfPlan=JSON.stringify(arr);renderPlan()}
+function renderPlan(){let arr=JSON.parse(localStorage.cfPlan||'null');if(!arr){makePlan();return} $('days').innerHTML=arr.map(d=>`<div class="day"><div class="dayhead"><strong>Hari ${d.day}</strong><span class="pill">Rencana</span></div><input aria-label="Topik hari ${d.day}" value="${esc(d.topic)}" onchange="editDay(${d.day},this.value)"></div>`).join('')}
+function editDay(day,val){let a=JSON.parse(localStorage.cfPlan||'[]');a[day-1].topic=val;localStorage.cfPlan=JSON.stringify(a)}
+function exportPlan(){let a=JSON.parse(localStorage.cfPlan||'[]');let csv='Hari,Topik\\n'+a.map(x=>x.day+',"'+x.topic.replace(/"/g,'""')+'"').join('\\n');download('rencana-30-hari.csv',csv,'text/csv')}
+function schedules(){return JSON.parse(localStorage.cfSchedules||'[]')}
+function addSchedule(){let name=$('upName').value.trim();if(!name){alert('Isi nama video dulu.');return}let platforms=[];if($('pTik').checked)platforms.push('TikTok');if($('pFb').checked)platforms.push('Facebook');if($('pYt').checked)platforms.push('YouTube');let a=schedules();a.push({id:Date.now(),date:$('upDate').value||new Date().toISOString().slice(0,10),time:$('upTime').value,name,caption:$('upCaption').value,platforms,done:false});localStorage.cfSchedules=JSON.stringify(a);$('upName').value='';$('upCaption').value='';renderSchedules()}
+function toggleDone(id){let a=schedules();let x=a.find(v=>v.id===id);if(x)x.done=!x.done;localStorage.cfSchedules=JSON.stringify(a);renderSchedules()}
+function removeSchedule(id){localStorage.cfSchedules=JSON.stringify(schedules().filter(x=>x.id!==id));renderSchedules()}
+function renderSchedules(){let a=schedules().sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time));$('doneCount').textContent=a.filter(x=>x.done).length;$('scheduleList').innerHTML=a.map(x=>`<div class="item"><div class="check"><input type="checkbox" ${x.done?'checked':''} onchange="toggleDone(${x.id})"><strong>${esc(x.name)}</strong></div><div class="small">${esc(x.date)} • ${esc(x.time)} • ${esc(x.platforms.join(', '))}</div><p>${esc(x.caption)}</p><button class="danger" onclick="removeSchedule(${x.id})">Hapus</button></div>`).join('')||'<p class="small">Belum ada jadwal upload.</p>'}
+function download(name,data,type){let u=URL.createObjectURL(new Blob([data],{type}));let a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+$('upDate').value=new Date().toISOString().slice(0,10);renderPlan();renderSchedules();
+</script>
+</body></html>
